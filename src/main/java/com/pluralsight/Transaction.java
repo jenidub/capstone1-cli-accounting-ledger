@@ -5,14 +5,14 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaction {
-    // property variables
+    // section 1: property variables
     LocalDate date;
     LocalTime time;
     String description;
     String vendor;
     float amount;
 
-    // constructor
+    // section 2: constructor
     public Transaction(LocalDate date, LocalTime time, String description, String vendor, float amount) {
         this.date = date;
         this.time = time;
@@ -21,7 +21,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    // getters and setters
+    // section 3: getters and setters
     public LocalDate getDate() {
         return date;
     }
@@ -62,7 +62,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-    // methods
+    // section 4: methods
     public String toString() {
         // 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
         String formattedDate = getDate().toString();
