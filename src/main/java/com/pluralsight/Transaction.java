@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     // property variables
@@ -62,4 +63,19 @@ public class Transaction {
     }
 
     // methods
+    public String toString() {
+        // 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
+        String formattedDate = getDate().toString();
+        LocalTime time = getTime();
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formattedTime = time.format(timeFormat);
+
+        return String.format("%s|%s|%s|%s|$%.2f",
+                formattedDate,
+                formattedTime,
+                getDescription(),
+                getVendor(),
+                getAmount()
+        );
+    }
 }
