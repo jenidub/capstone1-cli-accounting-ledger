@@ -70,7 +70,7 @@ public class Transaction {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
         String formattedTime = time.format(timeFormat);
 
-        return String.format("%s|%s|%s|%s|$%.2f",
+        return String.format("%s|%s|%s|%s|%.2f",
                 formattedDate,
                 formattedTime,
                 getDescription(),
