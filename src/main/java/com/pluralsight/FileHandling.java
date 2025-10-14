@@ -13,13 +13,13 @@ public class FileHandling {
         /// CODE TAKEN DIRECTLY FROM WORKBOOK 3
         try {
             // create a FileWriter object connected to transactions.csv file - used absolute reference of the file
-            FileWriter fileWriter = new FileWriter("/Users/missjeni/pluralsight/capstone-1-ledger/src/main/resources/transactions.csv");
+            FileWriter fileWriter = new FileWriter("/Users/missjeni/pluralsight/capstone-1-ledger/src/main/resources/transactions.csv", true);
 
             // create a BufferedWriter
             BufferedWriter bufWriter = new BufferedWriter(fileWriter);
 
             // write newTransaction (string with formatted transaction information) to the file
-            bufWriter.write(newTransaction);
+            bufWriter.write(newTransaction + "\n");
 
             // close the writer
             bufWriter.close();
