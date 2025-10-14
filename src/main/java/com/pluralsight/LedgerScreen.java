@@ -1,22 +1,17 @@
 package com.pluralsight;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LedgerScreen {
-    // empty constructor [ not required but can be included ]
-    //    public LedgerScreen(){}
-
     // Add a Scanner instance for user input
     Scanner scanner = new Scanner(System.in);
 
-    // Add an instance of the FileHandler for printouts
-    FileHandling fileHandler = new FileHandling();
+    //Create instances of ReportScreen so we can switch screens
+    ReportScreen reportScreen = new ReportScreen();
 
-    // Get all transactions from the transactions.csv file into an ArrayList
-    ArrayList<Transaction> transactionList = fileHandler.readTransactionFile();
-
-    public void showLedgerMenu() {
+    public void showLedgerMenu(ArrayList<Transaction> transactionList) {
         // Run the menu in while() loop - will run until the user exits to the MainScreen
         while (true) {
             //Ledger - All entries should show the newest entries first
@@ -25,7 +20,7 @@ public class LedgerScreen {
             //        account
             //        o P) Payments - Display only the negative entries (or payments)
             //        o H) Home - go back to the home page
-            System.out.println("*** LEDGER MENU ***");
+            System.out.println("\n\n*** LEDGER MENU ***");
             System.out.println("""
              [A] All - Display all entries
              [D] Deposits - Display only the entries that are deposits into the account
@@ -41,23 +36,54 @@ public class LedgerScreen {
             // Run option the user selected - change input toLowerCase for easier matching
             switch(input.toLowerCase()) {
                 case "a":
-                    System.out.println("Display all entries (most recent first)");
+                    displayAllTransactions(transactionList);
                     break;
                 case "d":
-                    System.out.println("Display all deposits / positive entries (most recent first)");
+                    displayAllDeposits(transactionList);
                     break;
                 case "p":
-                    System.out.println("Display all payments / negative entries (most recent first)");
+                    displayAllPayments(transactionList);
                     break;
                 case "r":
-                    System.out.println("Reports Menu (new screen)");
+                    reportScreen.showReportScreen(transactionList);
                     break;
                 case "h":
-                    System.out.println("Return to the home screen...");
-                    break;
+                    System.out.println("Returning to the HOME SCREEN...\n");
+                    return;
                 default:
                     System.out.println("Invalid choice - please try again");
                     break;
+            }
+        }
+    }
+
+    // Display all transactions - most recent first
+    public void displayAllTransactions(ArrayList<Transaction> transactionList){
+        System.out.println("\n\n=== FULL TRANSACTION LIST (Most Recent First) ===");
+
+        for (var i = transactionList.size() - 1; i >= 0; i--) {
+            System.out.println(transactionList.get(i).toString());
+        }
+    }
+
+    // Display all deposits only - most recent first
+    public void displayAllDeposits(ArrayList<Transaction> transactionList){
+        System.out.println("\n\n=== LEDGER DEPOSIT LIST (Most Recent First) ===");
+
+        for (var i = transactionList.size() - 1; i >= 0; i--) {
+            if (transactionList.get(i).getAmount() >= 0) {
+                System.out.println(transactionList.get(i).toString());
+            }
+        }
+    }
+
+    // Display all payments only - most recent first
+    public void displayAllPayments(ArrayList<Transaction> transactionList){
+        System.out.println("\n\n=== LEDGER PAYMENT LIST (Most Recent First) ===");
+
+        for (var i = transactionList.size() - 1; i >= 0; i--) {
+            if (transactionList.get(i).getAmount() < 0) {
+                System.out.println(transactionList.get(i).toString());
             }
         }
     }

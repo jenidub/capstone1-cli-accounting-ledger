@@ -2,19 +2,22 @@ package com.pluralsight;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainScreen {
     Scanner scanner = new Scanner(System.in);
-    FileHandling fileHandler = new FileHandling();
     LedgerScreen ledgerScreen = new LedgerScreen();
+
+    // Add an instance of the FileHandler for printouts
+    FileHandling fileHandler = new FileHandling();
+
+    // Get all transactions from the transactions.csv file into an ArrayList
+    ArrayList<Transaction> transactionList = fileHandler.readTransactionFile();
 
     public void showMainScreen() {
         // Run the MainScreen menu in while() loop - will run until the user exits the program
         while (true) {
-            System.out.println("WELCOME TO THE JENIDUB LEDGER OF DOOM!");
-            System.out.println("Use at your own risk....");
-
             // Display the Home Screen menu
             System.out.println("""
                 \n*** HOME SCREEN MENU ***
@@ -53,7 +56,7 @@ public class MainScreen {
                 case "l":
                     System.out.println("Switching to the ledger menu...");
                     // switch to the LedgerScreen class - new set of options
-                    ledgerScreen.showLedgerMenu();
+                    ledgerScreen.showLedgerMenu(transactionList);
                     break;
 
                 case "x":

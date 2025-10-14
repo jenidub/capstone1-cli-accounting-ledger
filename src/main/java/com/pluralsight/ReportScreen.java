@@ -51,7 +51,7 @@ public class ReportScreen {
                     break;
                 case "0":
                     System.out.println("Return to the Ledger Screen");
-                    break;
+                    return;
                 default:
                     System.out.println("Invalid choice - please try again");
                     break;
