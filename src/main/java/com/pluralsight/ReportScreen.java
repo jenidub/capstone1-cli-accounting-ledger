@@ -1,9 +1,12 @@
 package com.pluralsight;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class ReportScreen {
     // Create new Scanner instance for user input
@@ -27,6 +30,7 @@ public class ReportScreen {
              [3] Year to Date
              [4] Previous Year
              [5] Search by Vendor
+             [6] Custom Search
              [0] Back to the Home Menu
             """);
 
@@ -56,10 +60,10 @@ public class ReportScreen {
                     System.out.println("Search by vendor and show matching transactions");
                     displayByVendor(transactionList);
                     break;
-//                case "6":
-//                    System.out.println("Custom Search [CP1 Challenge Yourself]");
-//                    displayByVendor(transactionList);
-//                    break;
+                case "6":
+                    System.out.println("Custom Search [CP1 Challenge Yourself]");
+                    customSearch(transactionList);
+                    break;
                 case "0":
                     System.out.println("Return to the Ledger Screen");
                     return;
@@ -133,6 +137,83 @@ public class ReportScreen {
         for (var i = transactionList.size() - 1; i >= 0; i--) {
             if (transactionList.get(i).getVendor().equalsIgnoreCase(vendorName)) {
                 System.out.println(transactionList.get(i).toString());
+            }
+        }
+    }
+
+    public void customSearch(ArrayList<Transaction> transactionList) {
+        // Create a copy of the transactionList to be filtered
+        List<Transaction> filteredList = transactionList;
+
+        // Prompt the user for the following search values:
+        //§ Start Date
+        System.out.println("Start Date (YYYY-MM-DD):   ");
+        // Check if the user enters anything or if it's blank
+        String startDateString = scanner.nextLine();
+
+        // Filter out transaction that are before the start date if not blank
+        if (!startDateString.isEmpty()) {
+            LocalDate startDate = LocalDate.parse(startDateString);
+            filteredList = filteredList.stream()
+                    .filter(transaction -> transaction.getDate().isAfter(startDate) || transaction.getDate().isEqual(startDate))
+                    .collect(Collectors.toList());
+        }
+
+        //§ End Date
+        System.out.println("End Date (YYYY-MM-DD):   ");
+        // Check if the user enters anything or if it's blank
+        String endDateString = scanner.nextLine();
+        if (!endDateString.isEmpty()) {
+            LocalDate endDate = LocalDate.parse(endDateString);
+            filteredList = filteredList.stream()
+                    .filter(transaction -> transaction.getDate().isBefore(endDate) || transaction.getDate().isEqual(endDate))
+                    .collect(Collectors.toList());
+        }
+
+        //§ Description
+        System.out.println("Description:   ");
+        // Check if the user enters anything or if it's blank
+        String description = scanner.nextLine().toLowerCase();
+
+        if (!description.isEmpty()) {
+            filteredList = filteredList.stream()
+                    .filter(transaction -> transaction.getDescription().toLowerCase().contains(description))
+                    .collect(Collectors.toList());
+        }
+
+        //§ Vendor
+        System.out.println("Vendor Name:   ");
+        // Check if the user enters anything or if it's blank
+        String vendor = scanner.nextLine().toLowerCase();
+
+        if (!vendor.isEmpty()) {
+            filteredList = filteredList.stream()
+                    .filter(transaction -> transaction.getVendor().toLowerCase().contains(vendor))
+                    .collect(Collectors.toList());
+        }
+
+        //§ Amount
+        System.out.println("Amount (XXX.XX):   ");
+
+        // Check if the user enters anything or if it's blank
+        String amount = scanner.nextLine();
+
+        if (!amount.isEmpty()) {
+            double amountDouble = Double.parseDouble(amount);
+            filteredList = filteredList.stream()
+                    .filter(transaction -> transaction.getAmount() == amountDouble)
+                    .collect(Collectors.toList());
+        }
+
+        // Print out the results of the filtering process
+        // If the list is blank, print out a message informing the user
+        // Else iterate through the filtered list and print out each transaction
+        System.out.println("\n\n=== CUSTOM SEARCH TRANSACTION LIST (Most Recent First) ===");
+        if (filteredList.isEmpty()) {
+            System.out.println("***  No transactions matched your search  ***");
+        } else {
+            for (var i = filteredList.size() - 1; i >= 0; i--) {
+                System.out.println(filteredList.get(i).toString());
             }
         }
     }
